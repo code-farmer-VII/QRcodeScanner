@@ -15,7 +15,7 @@ export default function Layout() {
         },
       }}>
       <Stack.Screen name="index" options={{}} />
-      <Stack.Screen name="Home" options={{}} />
+      <Stack.Screen name="home" options={{}} />
     </Stack>
     </AttendanceProvider>
   );

@@ -11,14 +11,23 @@ const AttendanceProvider = ({ children }) => {
     const [mimeType, setMimeType] = useState(null);
     const [fileSize, setFileSize] = useState(null);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [section, setSection] = useState(null);
+    const [courseCode, setCourseCode] = useState(null);
+    const [isInputModal, setInputModal] = useState(false);
+    // Add more state variables as needed...
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
       };
+      const toggleInputModal = () => {
+        setInputModal(!isInputModal);
+    }
 
 
   return (
     <AttendanceContext.Provider value={{  isModalVisible, setModalVisible, toggleModal,
-     data, setData, fileUri, setFileUri, fileName, setFileName, mimeType, setMimeType, fileSize, setFileSize
+     data, setData, fileUri, setFileUri, fileName, setFileName, mimeType, setMimeType, fileSize, setFileSize,
+     isInputModal, toggleInputModal, section, setSection, courseCode, setCourseCode 
+
      }}>
       {children}
     </AttendanceContext.Provider>
