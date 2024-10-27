@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, Image } from 'react-native'
 import { AttendanceContext } from '../hook/context'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -9,15 +9,20 @@ function RetriveStudents() {
     } = useContext(AttendanceContext)
 
   return (
-    <View className="bg-blue-500 m-2 rounded-lg flex-1  h-full flex-col space-y-4 items-center justify-center shadow-lg shadow-gray-600  border-blue-600 border-2">
-         <TouchableOpacity
-          className=" flex-col space-y-4 items-center justify-center "
-          onPress={toggleInputModal}
-        >
-          <FontAwesome name="user-plus" size={20} color="white" style={{ marginRight: 8 }} />
-          <Text className="text-white">Retrieve Students
-          </Text>
-        </TouchableOpacity>
+    <View className="bg-white m-2 rounded-lg flex-1  h-full flex-col space-y-4 items-center justify-center shadow-lg shadow-gray-100  border-gray-100 border-2">
+
+      <TouchableOpacity
+        className=" flex-col space-y-4 items-center justify-center "
+        onPress={toggleInputModal}
+      >
+        <Image
+          source={require('../assets/Image/students.jpg')}
+          style={{ width: 100, height: 80 }}
+          resizeMode="contain"
+        />
+        {/* <FontAwesome name="user-plus" size={30} color="blue" style={{ marginRight: 8 }} /> */}
+        <Text className="text-red-600 text-md text-center font-bold">Retrieve Students</Text>
+      </TouchableOpacity>
     </View>
   )
 }

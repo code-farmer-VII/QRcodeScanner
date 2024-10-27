@@ -14,6 +14,8 @@ const AttendanceProvider = ({ children }) => {
     const [section, setSection] = useState(null);
     const [courseCode, setCourseCode] = useState(null);
     const [isInputModal, setInputModal] = useState(false);
+    const [studentId, setStudentId] = useState(null);
+    const [isStudentModal, setStudentModal] = useState(false);
     // Add more state variables as needed...
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -21,12 +23,16 @@ const AttendanceProvider = ({ children }) => {
       const toggleInputModal = () => {
         setInputModal(!isInputModal);
     }
+    const toggleStudentModal = () => {
+        setStudentModal(!isStudentModal);
+    }
 
 
   return (
     <AttendanceContext.Provider value={{  isModalVisible, setModalVisible, toggleModal,
      data, setData, fileUri, setFileUri, fileName, setFileName, mimeType, setMimeType, fileSize, setFileSize,
-     isInputModal, toggleInputModal, section, setSection, courseCode, setCourseCode 
+     isInputModal, toggleInputModal, section, setSection, courseCode, setCourseCode,
+     isStudentModal,  toggleStudentModal, studentId, setStudentId 
 
      }}>
       {children}

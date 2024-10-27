@@ -68,16 +68,11 @@ const BottomSheet = ({ visible, onClose }) => {
             <Text className="text-base mb-1">- department</Text>
             <Text className="text-base mb-1">- section</Text>
             <Text className="text-base mb-1">- QR code</Text>
-            <TouchableOpacity onPress={pickDocumentFile} className="bg-blue-600 py-4 px-6 rounded-lg mt-8">
-              <Text className="text-white">Okay</Text>
-            </TouchableOpacity>
+
           </View>
-          <TouchableOpacity
-            onPress={onClose}
-            className="mt-4 bg-blue-500 p-2 rounded"
-          >
-            <Text className="text-white text-center">Close</Text>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={pickDocumentFile} className="bg-blue-600 py-4 px-6 rounded-lg">
+              <Text className="text-white text-center">search from device</Text>
+            </TouchableOpacity>
         </View>
       </View>
     </Modal>

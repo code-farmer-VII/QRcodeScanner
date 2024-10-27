@@ -12,7 +12,10 @@ export const InputModal=()=>{
         toggleInputModal()
         }
     return(
-    <Modal isVisible={isInputModal} backdropOpacity={0.3}>
+    <Modal 
+    isVisible={isInputModal}
+    onBackdropPress={toggleInputModal}
+     >
       <View className="bg-gray-50 p-5 rounded-lg">
         <Text className="text-lg font-bold mb-3">Enter Section</Text>
         <TextInput
@@ -20,7 +23,7 @@ export const InputModal=()=>{
           value={section}
           onChangeText={setSection}
           keyboardType="numeric"
-          className="mb-4 border-2 px-3 rounded-lg h-12 border-red-500 text-lg"
+          className="mb-4 border-2 px-3 rounded-lg h-12 border-blue-100 text-lg"
         />
         <Text className="text-lg font-bold mb-3">Enter Course code</Text>
         <TextInput
@@ -28,7 +31,7 @@ export const InputModal=()=>{
           value={courseCode}
           onChangeText={setCourseCode}
           keyboardType="numeric"
-          className="mb-4 border-2 px-3 rounded-lg h-12 border-red-500 text-lg"
+          className="mb-4 border-2 px-3 rounded-lg h-12 border-blue-100 text-lg"
         />
         <View className="flex flex-row justify-between space-x-8 mt-6"> 
         <TouchableOpacity onPress={toggleInputModal} className="flex-1">
