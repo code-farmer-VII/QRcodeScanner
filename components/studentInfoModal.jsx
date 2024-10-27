@@ -4,14 +4,20 @@ import Modal from 'react-native-modal';
 import { AttendanceContext } from '../hook/context';
 import { router } from 'expo-router';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useCameraPermissions } from "expo-camera";
+
 
 
 
 
 export const StudentInfoModal = () => {
   const { isStudentModal, toggleStudentModal, studentId, setStudentId } = useContext(AttendanceContext)
-  const RedirectToSection = () => {
-    router.push("/home")
+  const [permission, requestPermission] = useCameraPermissions();
+  const isPermissionGranted = Boolean(permission?.granted);
+
+  const RetriveStudents = () => {
+    requestPermission();
+    router.push("/retriveStudentQrCode")
     toggleStudentModal()
   }
   return (
@@ -38,7 +44,7 @@ export const StudentInfoModal = () => {
         <View className="flex h-16">
           <TouchableOpacity
             className="bg-gray-200 rounded-lg flex-1 h-full flex-row space-x-4 items-center justify-center shadow-lg shadow-gray-600 border-gray-300 border-2"
-            onPress={() => console.log('QR Code Scanner')}
+            onPress={RetriveStudents}
           >
             <Text className="text-blue-600"> or you can search byQR Code Scanner</Text>
             <FontAwesome name="qrcode" size={20} color="red" style={{ marginRight: 8 }} />

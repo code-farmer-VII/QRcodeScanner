@@ -12,18 +12,26 @@ import StudentInfo from '../components/StudentInfo';
 import { router } from 'expo-router';
 // 
 const { width } = Dimensions.get('window'); // Screen width
+import { useCameraPermissions } from "expo-camera";
 
 export default function App() {
+  const [permission, requestPermission] = useCameraPermissions();
+  const isPermissionGranted = Boolean(permission?.granted);
+
  const Attendance =()=>{ 
-  router.push("/home")
+  requestPermission();
+    router.push("/QrCodeScanner")
+  
+
 }
     
 const AddStudent =()=>{ 
-  router.push("/home")
+  router.push("/addStudent")
 }
 
 const QrCodeScanner =()=>{ 
-  router.push("/home")
+  requestPermission();
+  router.push("/scanner")
 }
   return (
     <View className="flex-1">
@@ -124,6 +132,7 @@ const QrCodeScanner =()=>{
     <StudentInfoModal/>
     <StatusBar backgroundColor="blue" barStyle="white" />
     </View>
+    
 
   );
 }
