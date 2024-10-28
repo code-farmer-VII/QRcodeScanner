@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 export const InputModal=()=>{
     const { isInputModal, toggleInputModal, section, setSection, courseCode, setCourseCode } = useContext(AttendanceContext)
     const RedirectToSection = () => {
-        router.push("/home")
+        router.push("/attendance")
         toggleInputModal()
         }
     return(

@@ -35,7 +35,7 @@ export const ReadExcelFile = async (fileUri) => {
         .slice(1) 
         .map((row) => row.filter((cell) => cell !== null && cell !== undefined && cell !== ''))
         .filter((row) => row.length > 0);
-  
+        
       if (cleanedData.length === 0) {
         alert('No data to insert. Please make sure the Excel file has data rows.');
         return;

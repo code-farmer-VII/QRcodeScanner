@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StatusBar } from 'react-native';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Link } from 'expo-router';
+import { signUpWithEmail } from '../../db/Auth';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -14,7 +15,13 @@ const SignUp = () => {
       return;
     }
 
-    console.log('Signing up with:', email, password);
+    signUpWithEmail(email, password).then(response => {
+      if (response.error) {
+        alert(`Sign-up failed: ${response.error.message}`);
+      } else {
+        alert('Sign-up successful! Please check your email for a confirmation link.');
+      }
+    });
     router.push('/(drawer)/addStudent');
   };
 

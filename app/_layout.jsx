@@ -15,10 +15,10 @@ export default function Layout() {
           },
 
         }}
-              initialRouteName="welcome"
+              initialRouteName="index"
         >
         <Stack.Screen
-        name="welcome"
+        name="index"
         options={{
           headerShown: false, 
         }}
@@ -29,7 +29,7 @@ export default function Layout() {
           headerShown: false, 
         }}
       />
-        <Stack.Screen name="index" options={{
+        <Stack.Screen name="attendance" options={{
           headerTitle: 'Attendance App',
           headerStyle: {
             backgroundColor: 'blue',

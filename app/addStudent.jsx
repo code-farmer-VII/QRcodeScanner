@@ -31,7 +31,7 @@ function StudentForm() {
     setFullName('');
     setSection('');
     setDepartment('');
-    router.push("/")
+    router.push("/attendance")
   };
   return (
     <View className="flex-1 justify-center px-6 bg-gray-100">
