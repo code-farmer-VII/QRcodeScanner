@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, StatusBar, Alert, ActivityIndicator } from 'react-native';
 import { Link, router } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { logInWithEmail } from '../../db/Auth';
 
 const SignIn = () => {
   const [username, setUsername] = useState(''); 
@@ -9,7 +10,13 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false); // State for loading
 
 const handleSignIn = async () => {
-  console.log("Sign in button pressed");
+  logInWithEmail(email, password).then(response => {
+    if (response.error) {
+      alert(`Login failed: ${response.error.message}`);
+    } else {
+      alert('Login successful!');
+    }
+  });
   router.push('/');
 }
 
