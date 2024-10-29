@@ -5,19 +5,31 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { logInWithEmail } from '../../db/Auth';
 
 const SignIn = () => {
-  const [username, setUsername] = useState(''); 
+  const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // State for loading
 
 const handleSignIn = async () => {
   logInWithEmail(email, password).then(response => {
+
     if (response.error) {
       alert(`Login failed: ${response.error.message}`);
+
     } else {
+      const session = response.data.session;
+      const userId = session.user.id;
+      const accessToken = session.access_token;
+      const userEmail = session.user.email;
+    
+      console.log('User ID:', userId);
+      console.log('Access Token:', accessToken);
+      console.log('User Email:', userEmail);
+      router.push('/attendance');
       alert('Login successful!');
+
+
     }
   });
-  router.push('/');
 }
 
   return (
@@ -27,9 +39,9 @@ const handleSignIn = async () => {
       <View className="flex-row items-center bg-white w-3/4 p-4 mb-4 rounded-lg shadow">
         <Icon name="user" size={20} color="#999" className="mr-3 ml-3" /> 
         <TextInput
-          placeholder="Username" 
-          value={username} 
-          onChangeText={setUsername} 
+          placeholder="Enter your email" 
+          value={email} 
+          onChangeText={setEmail} 
           autoCapitalize="none"
           className="flex-1 border-l-2 border-gray-300 ml-2 pl-2"
           placeholderTextColor="#999"

@@ -3,26 +3,39 @@ import { View, Text, TextInput, Button, StatusBar } from 'react-native';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Link } from 'expo-router';
-import { signUpWithEmail } from '../../db/Auth';
+import { supabase } from '../../db/supaconfigration';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email || !password) {
       console.log('Please fill in all fields');
       return;
     }
-
-    signUpWithEmail(email, password).then(response => {
-      if (response.error) {
-        alert(`Sign-up failed: ${response.error.message}`);
-      } else {
-        alert('Sign-up successful! Please check your email for a confirmation link.');
-      }
+  
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
     });
-    router.push('/(drawer)/addStudent');
+
+    if (error) {
+      console.error('Sign-up error:', error.message);
+      return { error: error.message };
+    }
+    const session = data.session;
+    const userId = session.user.id;
+    const accessToken = session.access_token;
+    const userEmail = session.user.email;
+  
+    console.log('User ID:', userId);
+    console.log('Access Token:', accessToken);
+    console.log('User Email:', userEmail);
+    router.push("/attendance");
+    
+    return { user: data.user };
+
   };
 
   return (
