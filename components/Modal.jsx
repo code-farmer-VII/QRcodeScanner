@@ -4,6 +4,8 @@ import Modal from 'react-native-modal';
 import { AttendanceContext } from '../hook/context';
 import { PickDocument } from '../xlFileManuplation/DocumentPicker';
 import { ReadExcelFile } from '../xlFileManuplation/ReadXlFile';
+import { registerAndAssignStudents } from '../db/Auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BottomSheet = ({ visible, onClose }) => {
   const {
@@ -16,37 +18,51 @@ const BottomSheet = ({ visible, onClose }) => {
   } = useContext(AttendanceContext);
 
   const pickDocumentFile = async () => {
-    setData(null);
-    setFileName(null);
-    setFileSize(null);
-    setMimeType(null);  
-    setFileUri(null);
+    try {
+      setData(null);
+      setFileName(null);
+      setFileSize(null);
+      setMimeType(null);  
+      setFileUri(null);
 
-    toggleModal();
+      toggleModal();
 
-    const result = await PickDocument();
+      const result = await PickDocument();
 
-    if (result && result.assets && result.assets.length > 0) {
-      const fileUri = result.assets[0].uri;
+      if (result && result.assets && result.assets.length > 0) {
+        const fileUri = result.assets[0].uri;
 
-      setFileUri(fileUri);
-      console.log(fileUri);
+        if (fileUri) {
+          console.log("File URI:", fileUri);
+          setFileUri(fileUri); // Confirm that setFileUri is accessible
 
-      if (fileUri) {
-        const data = await ReadExcelFile(fileUri);
-        console.log(data);
-        if (data) {
-          console.log("Excel file data:", data);
-          setData(data);
-          setFileName(result.assets[0].name);
-          setMimeType(result.assets[0].mimeType);
-          setFileSize(result.assets[0].size);
+          const data = await ReadExcelFile(fileUri);
+          if (data) {
+            console.log("Excel file data:", data);
+            setData(data);
+            setFileName(result.assets[0].name);
+            setMimeType(result.assets[0].mimeType);
+            setFileSize(result.assets[0].size);
+
+            const userId = await AsyncStorage.getItem("userId");
+            if (userId) {
+              await registerAndAssignStudents(userId, data)
+                .then(response => console.log("Response:", response))
+                .catch(error => console.error("Error during registration:", error));
+            } else {
+              console.error("User ID not found in AsyncStorage.");
+            }
+          } else {
+            console.error("Failed to read data from Excel file.");
+          }
+        } else {
+          console.error('No file URI found.');
         }
       } else {
-        console.error('No file URI found.');
+        console.error('No file selected.');
       }
-    } else {
-      console.error('No file selected.');
+    } catch (error) {
+      console.error("Error in pickDocumentFile:", error);
     }
   };
 
@@ -68,11 +84,10 @@ const BottomSheet = ({ visible, onClose }) => {
             <Text className="text-base mb-1">- department</Text>
             <Text className="text-base mb-1">- section</Text>
             <Text className="text-base mb-1">- QR code</Text>
-
           </View>
           <TouchableOpacity onPress={pickDocumentFile} className="bg-blue-600 py-4 px-6 rounded-lg">
-              <Text className="text-white text-center">search from device</Text>
-            </TouchableOpacity>
+            <Text className="text-white text-center">search from device</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
