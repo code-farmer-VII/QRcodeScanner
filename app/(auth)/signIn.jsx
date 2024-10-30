@@ -1,14 +1,30 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StatusBar, Alert, ActivityIndicator } from 'react-native';
 import { Link, router } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { logInWithEmail } from '../../db/Auth';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const SignIn = () => {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // State for loading
+  const [loading, setLoading] = useState(false); 
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem("accessToken");
+
+        if (token) {
+          router.push("/attendance")
+        }
+      } catch (err) {
+        console.log("error message", err);
+      }
+    };
+    checkLoginStatus();
+  }, []);
 const handleSignIn = async () => {
   logInWithEmail(email, password).then(response => {
 
@@ -20,7 +36,10 @@ const handleSignIn = async () => {
       const userId = session.user.id;
       const accessToken = session.access_token;
       const userEmail = session.user.email;
-    
+      AsyncStorage.setItem("accessToken", accessToken);
+      AsyncStorage.setItem("userId", userId);
+      AsyncStorage.setItem("userEmail", userEmail);
+
       console.log('User ID:', userId);
       console.log('Access Token:', accessToken);
       console.log('User Email:', userEmail);
