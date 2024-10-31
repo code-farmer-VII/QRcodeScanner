@@ -6,6 +6,7 @@ import { AttendanceContext } from '../hook/context';
 import { registerAndAssignStudent } from '../db/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 function StudentForm() {
   const [studentSchoolId, setStudentSchoolId] = useState('');
   const [fullName, setFullName] = useState('');
@@ -15,7 +16,7 @@ function StudentForm() {
   const [courseCode, setCourseCode] = useState('');
 
   const handleSubmit = async () => {
-    if (!studentSchoolId || !fullName || !section || !department || !courseCode) {
+    if (!studentSchoolId || !fullName || !section || !department || !courseCode, !qrCode) {
       Alert.alert('Validation Failed', 'Please fill in all fields.');
       return;
     }

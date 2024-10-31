@@ -17,6 +17,7 @@ const AttendanceProvider = ({ children }) => {
     const [studentId, setStudentId] = useState(null);
     const [isStudentModal, setStudentModal] = useState(false);
     const [qrCode, setQrCode] = useState(null);
+    const [singleInfoData , setSingleInfodata] = useState()
     // Add more state variables as needed...
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -34,8 +35,8 @@ const AttendanceProvider = ({ children }) => {
      data, setData, fileUri, setFileUri, fileName, setFileName, mimeType, setMimeType, fileSize, setFileSize,
      isInputModal, toggleInputModal, section, setSection, courseCode, setCourseCode,
      isStudentModal,  toggleStudentModal, studentId, setStudentId,
-     qrCode, setQrCode
-
+     qrCode, setQrCode,
+     singleInfoData , setSingleInfodata
      }}>
       {children}
     </AttendanceContext.Provider>

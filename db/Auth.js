@@ -129,6 +129,8 @@ export async function recordStudentAttendance(teacherId, qrCode) {
 
 export async function registerAndAssignStudent(teacherId, studentInfo) {
   try {
+     
+
       // Step 1: Check if the student already exists in the Students table
       const { data: student, error: studentError } = await supabase
           .from('Students')
@@ -142,8 +144,8 @@ export async function registerAndAssignStudent(teacherId, studentInfo) {
           const { data: newStudent, error: newStudentError } = await supabase
               .from('Students')
               .insert([{
-                  student_school_id: studentInfo.student_school_id,
-                  name: studentInfo.name,
+                  student_school_id: studentInfo.studentSchoolId,
+                  name: studentInfo.fullName,
                   section: studentInfo.section,
                   department: studentInfo.department,
                   qr_code: studentInfo.qrCode,
@@ -194,4 +196,109 @@ export async function registerAndAssignStudent(teacherId, studentInfo) {
       console.error("Error registering or assigning student:", error);
       throw new Error(error.message || "Could not register or assign student");
   }
+}
+
+
+export async function getStudentInfoByQRCode(teacherId, qrCode) {
+    try {
+        // Step 1: Find the student by QR code
+        const { data: student, error: studentError } = await supabase
+            .from('Students')
+            .select('student_id, student_school_id, name, section, department, qr_code')
+            .eq('qr_code', qrCode)
+            .single();
+   
+        if (studentError || !student) {
+            throw new Error("Student not found with the provided QR code");
+        }
+        console.log("################3",student)
+
+        // Step 2: Check if the student is assigned to the teacher
+        const { data: assignment, error: assignmentError } = await supabase
+            .from('Teacher_Student_Assignments')
+            .select('student_id')
+            .eq('teacher_id', teacherId)
+            .eq('student_id', student.student_id)
+            .single();
+
+        if (assignmentError || !assignment) {
+            throw new Error("Student is not assigned to this teacher");
+        }
+
+        console.log("***************", assignment)
+        // Step 3: Retrieve the student's attendance records with this teacher
+        const { data: attendanceRecords, error: attendanceError } = await supabase
+            .from('Attendance')
+            .select('date, time, status')
+            .eq('teacher_id', teacherId)
+            .eq('student_id', student.student_id);
+
+        if (attendanceError) {
+            throw new Error("Error retrieving attendance records");
+        }
+
+        const data =  {
+            studentInfo: student,        // Basic information about the student
+            attendance: attendanceRecords // Attendance records with this teacher
+        };
+        console.log(data);
+        // Step 4: Combine the student information with their attendance records
+        return data
+
+    } catch (error) {
+        console.error("Error retrieving student information:", error.message);
+        throw new Error(error.message || "Could not retrieve student information");
+    }
+}
+
+export async function getStudentInfoByStudent_id(teacherId, studentSchoolId) {
+    try {
+        // Step 1: Find the student by QR code
+        const { data: student, error: studentError } = await supabase
+            .from('Students')
+            .select('student_id, student_school_id, name, section, department, qr_code')
+            .eq('student_school_id', studentSchoolId)
+            .single();
+
+        if (studentError || !student) {
+            throw new Error("Student not found with the provided QR code");
+        }
+        console.log(student)
+
+        // Step 2: Check if the student is assigned to the teacher
+        const { data: assignment, error: assignmentError } = await supabase
+            .from('Teacher_Student_Assignments')
+            .select('student_id')
+            .eq('teacher_id', teacherId)
+            .eq('student_id', student.student_id)
+            .single();
+        if (assignmentError || !assignment) {
+            throw new Error("Student is not assigned to this teacher");
+        }
+
+        console.log("///////////////////",assignment)
+        // Step 3: Retrieve the student's attendance records with this teacher
+        const { data: attendanceRecords, error: attendanceError } = await supabase
+            .from('Attendance')
+            .select('date, time, status')
+            .eq('teacher_id', teacherId)
+            .eq('student_id', student.student_id);
+
+        if (attendanceError) {
+            throw new Error("Error retrieving attendance records");
+        }
+        console.log("object")
+        console.log("************************************",attendanceRecords)
+        const data = {
+            studentInfo: student,        
+            attendance: attendanceRecords // Attendance records with this teacher
+        };
+        // Step 4: Combine the student information with their attendance records
+        console.log("********",data);
+        return data;
+
+    } catch (error) {
+        console.error("Error retrieving student information:", error.message);
+        throw new Error(error.message || "Could not retrieve student information");
+    }
 }

@@ -23,7 +23,7 @@ export default function Home() {
 
     const handleLogData = async () => {
         const userId = await AsyncStorage.getItem("userId");
-        recordStudentAttendance(userId, "699" ) 
+        recordStudentAttendance(userId, qrCodeData ) 
         console.log(qrCodeData);  
         qrLock.current = false;  
         setQrCodeData(null);
